@@ -43,6 +43,7 @@ function saveResults(array $data) {
 	foreach ($data as $k => $v) {
 		$stmt->bindParam(":$key", $v);
 	}
+	$stmt->execute();
 }
 
 
