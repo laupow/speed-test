@@ -15,17 +15,44 @@ function runSpeedtest(array $args = ["--json"]) : string {
 }
 
 function getDbh() {
-	$dsn = 'mysql:host=' . getenv(DB_HOST) . ';dbname='.getenv(DB_NAME) . "';charset=UTF8;";
-	$dbh = new PDO($dsn, getenv(DB_USER), $getenv(DB_PASS));
+	$dsn = 'mysql:host=' . getenv("DB_HOST") . ';dbname=' . getenv("DB_NAME") . "';charset=utf8mb4;";
+	$dbh = new PDO($dsn, getenv("DB_USER"), getenv("DB_PASS"));
+	return $dbh;
+}
+
+function flattenDataForInsert(array $array, $prefix = "") {
+	$new = [];
+	foreach($array as $key => $value) {
+		if (is_array($value)) {
+			$vals = flattenDataForInsert($value, $key . "_");
+			$new = array_merge($new, $vals);
+		} else {
+			$new[$prefix . $key] = $value;
+		}
+	}
+	return $new;
 }
 
 function saveResults(array $data) {
-	print_r($data);
+	$keys = "`". implode("`, `", array_keys($data)) ."`";
+	$val_params = ":" . implode(", :", array_keys($data));
+	$sql = "INSERT INTO `logs` ($keys) VALUES ($val_params)";
+
+	$dbh = getDbh();
+	$stmt = $dbh->prepare($sql);
+	foreach ($data as $k => $v) {
+		$stmt->bindParam(":$key", $v);
+	}
 }
 
 
 $json = runSpeedtest();
+// testing
+// $json = file_get_contents("speedtest-cli_output_example.json");
+
 $data = json_decode(trim($json), true);
+$data = flattenDataForInsert($data);
+
 saveResults($data);
 
 
