@@ -41,7 +41,7 @@ function saveResults(array $data) {
 	$dbh = getDbh();
 	$stmt = $dbh->prepare($sql);
 	foreach ($data as $k => $v) {
-		$stmt->bindParam(":$key", $v);
+		$stmt->bindParam(":$k", $v);
 	}
 	$stmt->execute();
 }
