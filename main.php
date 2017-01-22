@@ -15,7 +15,7 @@ function runSpeedtest(array $args = ["--json"]) {
 }
 
 function getDbh() {
-	$dsn = 'mysql:host=' . getenv("DB_HOST") . ';dbname=' . getenv("DB_NAME") . "';charset=utf8mb4;";
+	$dsn = 'mysql:host=' . getenv("DB_HOST") . ';dbname=' . getenv("DB_NAME") . ";charset=utf8mb4;";
 	$dbh = new PDO($dsn, getenv("DB_USER"), getenv("DB_PASS"));
 	return $dbh;
 }
