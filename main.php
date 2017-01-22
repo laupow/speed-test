@@ -6,7 +6,7 @@ $dotenv = new Dotenv\Dotenv(__DIR__);
 $dotenv->load();
 $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS']);
 
-function runSpeedtest(array $args = ["--json"]) : string {
+function runSpeedtest(array $args = ["--json"]) {
 	$python 	= "/usr/bin/python";
 	$speedtest 	= "/speedtest-cli/speedtest.py";
 	$speedtestCmd = join(" ", [$python, __DIR__ . $speedtest, implode(" ", $args)]);
